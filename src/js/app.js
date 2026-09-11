@@ -1,3 +1,105 @@
+// App Load par saved kundlis list update karein
+window.onload = function() {
+    updateSavedKundliDropdown();
+};
+
+function goToScreen(screenNumber) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen' + screenNumber).classList.add('active');
+    
+    if (screenNumber === 3) {
+        const name = document.getElementById('b_name').value;
+        const place = document.getElementById('b_place').value;
+        const date = document.getElementById('b_date').value;
+        document.getElementById('user-summary').innerText = `Report for: ${name} | Place: ${place} | Date: ${date}`;
+        drawChakra();
+    }
+}
+
+// Kundli Save karne ka function
+function saveCurrentKundli() {
+    const name = document.getElementById('b_name').value.trim();
+    if (!name) {
+        alert("Please enter a name for the kundli.");
+        return;
+    }
+
+    let kundliData = {
+        name: name,
+        date: document.getElementById('b_date').value,
+        time: document.getElementById('b_time').value,
+        place: document.getElementById('b_place').value,
+        houses: {},
+        planets: {}
+    };
+
+    // Houses degrees capture
+    for (let i = 1; i <= 12; i++) {
+        kundliData.houses['h' + i] = document.getElementById('h' + i).value;
+    }
+
+    // Planets degrees capture
+    const pList = ['su', 'mo', 'ma', 'me', 'ju', 've', 'sa', 'ra', 'ke'];
+    pList.forEach(p => {
+        kundliData.planets['p_' + p] = document.getElementById('p_' + p).value;
+    });
+
+    // LocalStorage me save karna
+    let savedKundlis = JSON.parse(localStorage.getItem('ghani_saved_kundlis')) || {};
+    savedKundlis[name] = kundliData;
+    localStorage.setItem('ghani_saved_kundlis', JSON.stringify(savedKundlis));
+
+    alert(`Kundli for "${name}" saved successfully!`);
+    updateSavedKundliDropdown();
+}
+
+// Dropdown list ko update karna
+function updateSavedKundliDropdown() {
+    const select = document.getElementById('saved-kundli-list');
+    if (!select) return;
+    
+    select.innerHTML = '<option value="">-- Select Saved Kundli --</option>';
+    let savedKundlis = JSON.parse(localStorage.getItem('ghani_saved_kundlis')) || {};
+    
+    for (let name in savedKundlis) {
+        let opt = document.createElement('option');
+        opt.value = name;
+        opt.innerText = name;
+        select.appendChild(opt);
+    }
+}
+
+// Dropdown se select karne par data wapas form me load karna
+function loadSelectedKundli() {
+    const name = document.getElementById('saved-kundli-list').value;
+    if (!name) return;
+
+    let savedKundlis = JSON.parse(localStorage.getItem('ghani_saved_kundlis')) || {};
+    let data = savedKundlis[name];
+
+    if (data) {
+        document.getElementById('b_name').value = data.name;
+        document.getElementById('b_date').value = data.date;
+        document.getElementById('b_time').value = data.time;
+        document.getElementById('b_place').value = data.place;
+
+        for (let i = 1; i <= 12; i++) {
+            if(data.houses['h' + i] !== undefined) {
+                document.getElementById('h' + i).value = data.houses['h' + i];
+            }
+        }
+
+        const pList = ['su', 'mo', 'ma', 'me', 'ju', 've', 'sa', 'ra', 'ke'];
+        pList.forEach(p => {
+            if(data.planets['p_' + p] !== undefined) {
+                document.getElementById('p_' + p).value = data.planets['p_' + p];
+            }
+        });
+
+        alert(`Kundli for "${name}" loaded successfully!`);
+    }
+}
+
 function drawChakra() {
     const canvas = document.getElementById('astroCanvas');
     const ctx = canvas.getContext('2d');
@@ -12,7 +114,7 @@ function drawChakra() {
     const cy = h / 2;
     
     const bgImg = new Image();
-    bgImg.src = 'chakra.png'; // सुनिश्चित करें कि आपकी इमेज का नाम यही है
+    bgImg.src = 'chakra.png';
     
     bgImg.onload = function() {
         ctx.drawImage(bgImg, 0, 0, w, h);
@@ -81,50 +183,25 @@ function drawPlanetsAndDegrees(ctx, cx, cy) {
 
 function downloadPDF() {
     const canvas = document.getElementById('astroCanvas');
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width;
-    const h = canvas.height;
+    const name = document.getElementById('b_name').value;
+    const place = document.getElementById('b_place').value;
+    const dataUrl = canvas.toDataURL('image/png');
     
-    ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = '#050505';
-    ctx.fillRect(0, 0, w, h);
-    
-    const bgImg = new Image();
-    bgImg.src = 'chakra.png';
-    
-    // इमेज पूरी तरह लोड होने के बाद ही PDF/Print विंडो खुलेगी, जिससे काला स्क्रीन नहीं आएगा
-    bgImg.onload = function() {
-        ctx.drawImage(bgImg, 0, 0, w, h);
-        drawPlanetsAndDegrees(ctx, w/2, h/2);
-        
-        setTimeout(() => {
-            const dataUrl = canvas.toDataURL('image/png');
-            openPrintWindow(dataUrl);
-        }, 300);
-    };
-    
-    bgImg.onerror = function() {
-        drawPlanetsAndDegrees(ctx, w/2, h/2);
-        const dataUrl = canvas.toDataURL('image/png');
-        openPrintWindow(dataUrl);
-    };
-}
-
-function openPrintWindow(dataUrl) {
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
         <html>
             <head>
-                <title>Harsh Astro Vastu Chakra Report</title>
+                <title>Ghani Astro Vastu Chakra Report</title>
                 <style>
                     body { text-align: center; background: white; margin: 0; padding: 20px; font-family: Arial; }
-                    img { max-width: 100%; height: auto; margin-top: 20px; }
-                    h2 { color: #333; margin-bottom: 5px; }
+                    img { max-width: 100%; height: auto; margin-top: 15px; border-radius: 50%; }
+                    h2 { color: #d35400; margin-bottom: 2px; }
+                    p { color: #555; font-size: 14px; }
                 </style>
             </head>
             <body>
-                <h2>Harsh Astro Vastu Chakra Report</h2>
-                <p>Generated via Astro Vastu App</p>
+                <h2>Ghani Astro Vastu Chakra Report</h2>
+                <p><b>Name:</b> ${name} | <b>Place:</b> ${place}</p>
                 <br>
                 <img src="${dataUrl}" />
                 <script>
