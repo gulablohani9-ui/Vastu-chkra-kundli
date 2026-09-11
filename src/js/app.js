@@ -5,27 +5,21 @@ function drawChakra() {
     const h = canvas.height;
     
     ctx.clearRect(0, 0, w, h);
-    
-    // डार्क बैकग्राउंड पहले सेट करें ताकि जब तक इमेज लोड हो, स्क्रीन काली न दिखे
     ctx.fillStyle = '#050505';
     ctx.fillRect(0, 0, w, h);
     
     const cx = w / 2;
     const cy = h / 2;
     
-    // ओरिजिनल PNG इमेज लोड करें
     const bgImg = new Image();
-    bgImg.src = 'chakra.png'; // सुनिश्चित करें कि फाइल का नाम यही हो
+    bgImg.src = 'chakra.png'; // सुनिश्चित करें कि आपकी इमेज का नाम यही है
     
     bgImg.onload = function() {
-        // इमेज को कैनवास पर परफेक्ट फिट करें
         ctx.drawImage(bgImg, 0, 0, w, h);
-        // इमेज लोड होने के बाद उसके ऊपर ग्रह और लाइन्स ड्रा करें
         drawPlanetsAndDegrees(ctx, cx, cy);
     };
     
     bgImg.onerror = function() {
-        // अगर किसी वजह से इमेज लोड न हो, तो भी बैकग्राउंड और ग्रह ड्रा हो जाएं
         drawPlanetsAndDegrees(ctx, cx, cy);
     };
 }
@@ -45,8 +39,8 @@ function drawPlanetsAndDegrees(ctx, cx, cy) {
         {id: 'p_ke', label: 'KETU', color: '#26a69a'}
     ];
     
-    const innerRadius = 220; // चक्र का अंदरूनी हिस्सा जहाँ से लाइन शुरू होगी
-    const outerRadius = 400; // चक्र का बाहरी हिस्सा जहाँ ग्रह का नाम दिखेगा
+    const innerRadius = 220; 
+    const outerRadius = 400; 
     
     ctx.font = 'bold 14px Arial';
     let positions = [];
@@ -66,7 +60,6 @@ function drawPlanetsAndDegrees(ctx, cx, cy) {
         let px = cx + (outerRadius - overlapOffset) * Math.cos(angle);
         let py = cy + (outerRadius - overlapOffset) * Math.sin(angle);
         
-        // चक्र के अंदर से ग्रह तक की कनेक्टिंग लाइन
         ctx.strokeStyle = p.color;
         ctx.lineWidth = 1.5;
         ctx.beginPath();
@@ -74,13 +67,11 @@ function drawPlanetsAndDegrees(ctx, cx, cy) {
         ctx.lineTo(px, py);
         ctx.stroke();
         
-        // ग्रह के नाम का बॉक्स
         ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
         ctx.fillRect(px - 45, py - 12, 90, 24);
         ctx.strokeStyle = p.color;
         ctx.strokeRect(px - 45, py - 12, 90, 24);
         
-        // टेक्स्ट (ग्रह और डिग्री)
         ctx.fillStyle = p.color;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -89,11 +80,37 @@ function drawPlanetsAndDegrees(ctx, cx, cy) {
 }
 
 function downloadPDF() {
-    drawChakra();
-    
     const canvas = document.getElementById('astroCanvas');
-    const dataUrl = canvas.toDataURL('image/png');
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
     
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#050505';
+    ctx.fillRect(0, 0, w, h);
+    
+    const bgImg = new Image();
+    bgImg.src = 'chakra.png';
+    
+    // इमेज पूरी तरह लोड होने के बाद ही PDF/Print विंडो खुलेगी, जिससे काला स्क्रीन नहीं आएगा
+    bgImg.onload = function() {
+        ctx.drawImage(bgImg, 0, 0, w, h);
+        drawPlanetsAndDegrees(ctx, w/2, h/2);
+        
+        setTimeout(() => {
+            const dataUrl = canvas.toDataURL('image/png');
+            openPrintWindow(dataUrl);
+        }, 300);
+    };
+    
+    bgImg.onerror = function() {
+        drawPlanetsAndDegrees(ctx, w/2, h/2);
+        const dataUrl = canvas.toDataURL('image/png');
+        openPrintWindow(dataUrl);
+    };
+}
+
+function openPrintWindow(dataUrl) {
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
         <html>
@@ -113,7 +130,7 @@ function downloadPDF() {
                 <script>
                     setTimeout(() => {
                         window.print();
-                    }, 500);
+                    }, 800);
                 </script>
             </body>
         </html>
