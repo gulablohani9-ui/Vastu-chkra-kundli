@@ -1,0 +1,6 @@
+{
+  "appId": "com.astrovastu.chakra",
+  "appName": "AstroVastuChakra",
+  "webDir": "src",
+  "bundledWebRuntime": false
+}
