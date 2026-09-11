@@ -1,91 +1,81 @@
-function drawChakra() {
-    const canvas = document.getElementById('astroCanvas');
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width;
-    const h = canvas.height;
-    
-    ctx.clearRect(0, 0, w, h);
-    
-    // 1. आपकी असली PNG इमेज को बैकग्राउंड के रूप में लोड करना
-    const bgImg = new Image();
-    bgImg.src = 'chakra.png'; // आपकी इमेज का नाम
-    
-    bgImg.onload = function() {
-        // इमेज को कैनवास पर फिट करना
-        ctx.drawImage(bgImg, 0, 0, w, h);
-        // इमेज लोड होने के बाद उसके ऊपर ग्रह ड्रा करना
-        drawPlanetsAndDegrees(ctx, w/2, h/2);
-    };
-    
-    // अगर इमेज लोड होने में कोई दिक्कत हो, तो भी कोड एरर न दे और ग्रह ड्रा कर दे
-    bgImg.onerror = function() {
-        ctx.fillStyle = '#111111'; // डार्क बैकग्राउंड
-        ctx.fillRect(0, 0, w, h);
-        drawPlanetsAndDegrees(ctx, w/2, h/2);
-    };
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astro Vastu Chakra Generator</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; text-align: center; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { color: #d35400; margin-bottom: 5px; }
+        p { color: #7f8c8d; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; margin-bottom: 20px; }
+        .input-group { background: #ecf0f1; padding: 15px; border-radius: 8px; }
+        .input-group h3 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #bdc3c7; padding-bottom: 5px; }
+        .field { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        label { font-size: 14px; color: #34495e; font-weight: 500; }
+        input { width: 80px; padding: 6px; border: 1px solid #bdc3c7; border-radius: 4px; text-align: right; }
+        .btn-group { margin-top: 20px; }
+        button { background: #2980b9; color: white; border: none; padding: 12px 25px; font-size: 16px; border-radius: 5px; cursor: pointer; margin: 5px; transition: 0.3s; font-weight: bold; }
+        button:hover { background: #3498db; }
+        .btn-pdf { background: #27ae60; }
+        .btn-pdf:hover { background: #2ecc71; }
+        #pdf-content { margin-top: 30px; background: white; display: inline-block; padding: 20px; border-radius: 10px; }
+        canvas { max-width: 100%; height: auto; border: 1px solid #ecf0f1; border-radius: 50%; box-shadow: 0 0 15px rgba(0,0,0,0.05); }
+        
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Astro Vastu Chakra</h1>
+        <p>Manual Degree Entry App</p>
+        
+        <div class="grid">
+            <div class="input-group">
+                <h3>Houses (Bhav) Degrees</h3>
+                <div class="field"><label>I House (Asc):</label><input type="number" id="h1" value="0"></div>
+                <div class="field"><label>II House:</label><input type="number" id="h2" value="30"></div>
+                <div class="field"><label>III House:</label><input type="number" id="h3" value="60"></div>
+                <div class="field"><label>IV House:</label><input type="number" id="h4" value="90"></div>
+                <div class="field"><label>V House:</label><input type="number" id="h5" value="120"></div>
+                <div class="field"><label>VI House:</label><input type="number" id="h6" value="150"></div>
+                <div class="field"><label>VII House:</label><input type="number" id="h7" value="180"></div>
+                <div class="field"><label>VIII House:</label><input type="number" id="h8" value="210"></div>
+                <div class="field"><label>IX House:</label><input type="number" id="h9" value="240"></div>
+                <div class="field"><label>X House:</label><input type="number" id="h10" value="270"></div>
+                <div class="field"><label>XI House:</label><input type="number" id="h11" value="300"></div>
+                <div class="field"><label>XII House:</label><input type="number" id="h12" value="330"></div>
+            </div>
+            <div class="input-group">
+                <h3>Planets (Graha) Degrees</h3>
+                <div class="field"><label>Sun (Su):</label><input type="number" id="p_su" value="15"></div>
+                <div class="field"><label>Moon (Mo):</label><input type="number" id="p_mo" value="45"></div>
+                <div class="field"><label>Mars (Ma):</label><input type="number" id="p_ma" value="75"></div>
+                <div class="field"><label>Mercury (Me):</label><input type="number" id="p_me" value="105"></div>
+                <div class="field"><label>Jupiter (Ju):</label><input type="number" id="p_ju" value="135"></div>
+                <div class="field"><label>Venus (Ve):</label><input type="number" id="p_ve" value="165"></div>
+                <div class="field"><label>Saturn (Sa):</label><input type="number" id="p_sa" value="195"></div>
+                <div class="field"><label>Rahu (Ra):</label><input type="number" id="p_ra" value="225"></div>
+                <div class="field"><label>Ketu (Ke):</label><input type="number" id="p_ke" value="45"></div>
+            </div>
+        </div>
 
-function drawPlanetsAndDegrees(ctx, cx, cy) {
-    const getAngle = (deg) => (deg - 90) * (Math.PI / 180);
-    
-    // ग्रहों की लिस्ट
-    const planets = [
-        {id: 'p_su', label: 'SUN', color: '#ff5722'},
-        {id: 'p_mo', label: 'MOON', color: '#03a9f4'},
-        {id: 'p_ma', label: 'MARS', color: '#e91e63'},
-        {id: 'p_me', label: 'MERCURY', color: '#4caf50'},
-        {id: 'p_ju', label: 'JUPITER', color: '#ffeb3b'},
-        {id: 'p_ve', label: 'VENUS', color: '#ab47bc'},
-        {id: 'p_sa', label: 'SATURN', color: '#90caf9'},
-        {id: 'p_ra', label: 'RAHU', color: '#ff7043'},
-        {id: 'p_ke', label: 'KETU', color: '#26a69a'}
-    ];
-    
-    // आपकी इमेज के हिसाब से ग्रहों की पोजीशन का दायरा (Radius)
-    const innerRadius = 240; // चक्र का अंदरूनी हिस्सा
-    const outerRadius = 380; // चक्र का बाहरी हिस्सा जहाँ ग्रह दिखेंगे
-    
-    ctx.font = 'bold 14px Arial';
-    let positions = [];
-    
-    planets.forEach(p => {
-        let deg = parseFloat(document.getElementById(p.id).value) || 0;
-        let angle = getAngle(deg);
-        
-        let overlapOffset = 0;
-        positions.forEach(pos => {
-            if (Math.abs(pos.angle - angle) < 0.08) {
-                overlapOffset += 22; // ओवरलैप रोकने के लिए
-            }
-        });
-        positions.push({angle: angle});
-        
-        let px = cx + (outerRadius - overlapOffset) * Math.cos(angle);
-        let py = cy + (outerRadius - overlapOffset) * Math.sin(angle);
-        
-        // केंद्र से ग्रह तक की लाइन
-        ctx.strokeStyle = p.color;
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(cx + innerRadius * Math.cos(angle), cy + innerRadius * Math.sin(angle));
-        ctx.lineTo(px, py);
-        ctx.stroke();
-        
-        // ग्रह के नाम का बॉक्स
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-        ctx.fillRect(px - 40, py - 11, 80, 22);
-        ctx.strokeStyle = p.color;
-        ctx.strokeRect(px - 40, py - 11, 80, 22);
-        
-        // टेक्स्ट
-        ctx.fillStyle = p.color;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(`${p.label} ${deg}°`, px, py);
-    });
-}
+        <div class="btn-group">
+            <button onclick="drawChakra()">1. Draw Chakra</button>
+            <button class="btn-pdf" onclick="downloadPDF()">2. Download HD PDF</button>
+        </div>
 
-function downloadPDF() {
-    drawChakra();
-    window.print(); // एक क्लिक में HD PDF सेव करने के लिए
-}
+        <div id="pdf-content">
+            <canvas id="astroCanvas" width="900" height="900"></canvas>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        window.onload = drawChakra;
+    </script>
+</body>
+</html>
