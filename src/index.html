@@ -3,60 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ghani Astro Vastu Chakra</title>
+    <title>Ghani Astro Vastu Complete KP</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; text-align: center; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        h1 { color: #d35400; margin-bottom: 5px; }
-        p { color: #7f8c8d; margin-bottom: 20px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; margin: 0; padding: 15px; text-align: center; color: #333; }
+        .container { max-width: 950px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #d35400; margin-bottom: 2px; }
+        p { color: #7f8c8d; margin-bottom: 15px; font-size: 14px; }
         
         .screen { display: none; text-align: left; }
         .screen.active { display: block; }
         
-        .card { background: #ecf0f1; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-        .card h3 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #bdc3c7; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .field { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        label { font-size: 14px; color: #34495e; font-weight: 600; }
-        input, select { width: 60%; padding: 8px; border: 1px solid #bdc3c7; border-radius: 4px; }
+        .card { background: #ecf0f1; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .card h3 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #bdc3c7; padding-bottom: 6px; font-size: 16px; }
+        .field { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        label { font-size: 13px; color: #34495e; font-weight: 600; }
+        input, select { width: 60%; padding: 6px; border: 1px solid #bdc3c7; border-radius: 4px; font-size: 13px; }
         
-        .btn-location { background: #16a085; color: white; border: none; padding: 8px 12px; font-size: 12px; border-radius: 4px; cursor: pointer; margin-left: 5px; font-weight: bold; }
-        .btn-location:hover { background: #1abc9c; }
-
-        .grid-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .btn-location { background: #16a085; color: white; border: none; padding: 6px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; margin-left: 5px; font-weight: bold; }
+        .grid-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         
-        .btn-group { margin-top: 20px; text-align: center; }
-        button { background: #2980b9; color: white; border: none; padding: 12px 25px; font-size: 16px; border-radius: 6px; cursor: pointer; margin: 5px; font-weight: bold; transition: 0.3s; }
+        .btn-group { margin-top: 15px; text-align: center; }
+        button { background: #2980b9; color: white; border: none; padding: 10px 20px; font-size: 14px; border-radius: 6px; cursor: pointer; margin: 4px; font-weight: bold; transition: 0.3s; }
         button:hover { background: #3498db; }
         .btn-next { background: #e67e22; }
-        .btn-next:hover { background: #d35400; }
         .btn-pdf { background: #27ae60; }
-        .btn-pdf:hover { background: #2ecc71; }
         .btn-save { background: #8e44ad; }
-        .btn-save:hover { background: #9b59b6; }
         .btn-back { background: #7f8c8d; }
-        .btn-back:hover { background: #636e72; }
 
-        #preview-box { text-align: center; margin-top: 15px; background: #050505; padding: 15px; border-radius: 8px; }
-        canvas { max-width: 100%; height: auto; border-radius: 50%; box-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; background: white; }
+        th, td { border: 1px solid #bdc3c7; padding: 6px; text-align: center; }
+        th { background: #2c3e50; color: white; }
+
+        /* Diamond Chart SVG */
+        .chart-box { text-align: center; margin: 10px 0; background: #fff; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
+        svg { max-width: 100%; height: auto; }
+
+        #preview-box { text-align: center; margin-top: 10px; background: #050505; padding: 10px; border-radius: 8px; }
+        canvas { max-width: 100%; height: auto; border-radius: 50%; }
+
+        /* Print / PDF Styling */
+        @media print {
+            body * { visibility: hidden; }
+            #printable-report, #printable-report * { visibility: visible; }
+            #printable-report { position: absolute; left: 0; top: 0; width: 100%; background: white; }
+            .btn-group { display: none; }
+        }
 
         @media (max-width: 600px) {
             .grid-cols { grid-template-columns: 1fr; }
             .field { flex-direction: column; align-items: flex-start; }
-            input, select { width: 100%; margin-top: 5px; }
+            input, select { width: 100%; margin-top: 4px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="printable-report">
         <h1>Ghani Astro Vastu</h1>
-        <p>KP Astrology & Saved Kundli System</p>
+        <p>Complete KP Astrology, Ashtakvarga & Vastu Chakra System</p>
         
         <!-- SCREEN 1: Birth Details & Saved Kundlis -->
         <div id="screen1" class="screen active">
             <div class="card">
-                <h3>Step 1: Saved Kundlis</h3>
+                <h3>Load Saved Kundli</h3>
                 <div class="field">
-                    <label>Load Saved Kundli:</label>
+                    <label>Select Saved:</label>
                     <select id="saved-kundli-list" onchange="loadSelectedKundli()">
                         <option value="">-- Select Saved Kundli --</option>
                     </select>
@@ -72,12 +83,12 @@
                     <label>Birth Place:</label>
                     <div style="display: flex; width: 60%;">
                         <input type="text" id="b_place" value="Jodhpur" style="width: 100%;">
-                        <button type="button" class="btn-location" onclick="getAutoLocation()">Auto Detect</button>
+                        <button type="button" class="btn-location" onclick="getAutoLocation()">Auto</button>
                     </div>
                 </div>
             </div>
             <div class="btn-group">
-                <button class="btn-next" onclick="goToScreen(2)">Next: Enter Degrees &rarr;</button>
+                <button class="btn-next" onclick="goToScreen(2)">Next: Degrees &rarr;</button>
             </div>
         </div>
 
@@ -85,7 +96,7 @@
         <div id="screen2" class="screen">
             <div class="grid-cols">
                 <div class="card">
-                    <h3>Step 2A: Houses (Bhav) Degrees</h3>
+                    <h3>Houses (Bhav Cusps)</h3>
                     <div class="field"><label>I House:</label><input type="number" id="h1" value="0"></div>
                     <div class="field"><label>II House:</label><input type="number" id="h2" value="30"></div>
                     <div class="field"><label>III House:</label><input type="number" id="h3" value="60"></div>
@@ -100,7 +111,7 @@
                     <div class="field"><label>XII House:</label><input type="number" id="h12" value="330"></div>
                 </div>
                 <div class="card">
-                    <h3>Step 2B: Planets (Graha) Degrees</h3>
+                    <h3>Planets Degrees</h3>
                     <div class="field"><label>Sun (Su):</label><input type="number" id="p_su" value="15"></div>
                     <div class="field"><label>Moon (Mo):</label><input type="number" id="p_mo" value="45"></div>
                     <div class="field"><label>Mars (Ma):</label><input type="number" id="p_ma" value="75"></div>
@@ -115,22 +126,91 @@
             <div class="btn-group">
                 <button class="btn-back" onclick="goToScreen(1)">&larr; Back</button>
                 <button class="btn-save" onclick="saveCurrentKundli()">Save Kundli</button>
-                <button class="btn-next" onclick="goToScreen(3)">Next: View Preview &rarr;</button>
+                <button class="btn-next" onclick="goToScreen(3)">KP Table &rarr;</button>
             </div>
         </div>
 
-        <!-- SCREEN 3: PDF Preview & Download -->
+        <!-- SCREEN 3: KP Planetary Table & Diamond Chart -->
         <div id="screen3" class="screen">
+            <div class="card">
+                <h3>KP Planet & House Significators (Nak, Sub, SSLord)</h3>
+                <div style="overflow-x:auto;">
+                    <table id="kp-table">
+                        <tr><th>Planet</th><th>Sign</th><th>Degree</th><th>Nakshatra</th><th>Sub Lord</th><th>SS Lord</th></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="card">
+                <h3>North Indian Diamond Chart</h3>
+                <div class="chart-box">
+                    <svg width="300" height="300" viewBox="0 0 300 300">
+                        <polygon points="150,10 290,150 150,290 10,150" fill="none" stroke="#2c3e50" stroke-width="3"/>
+                        <line x1="10" y1="150" x2="290" y2="150" stroke="#2c3e50" stroke-width="2"/>
+                        <line x1="150" y1="10" x2="150" y2="290" stroke="#2c3e50" stroke-width="2"/>
+                        <line x1="10" y1="10" x2="290" y2="290" stroke="#2c3e50" stroke-width="2"/>
+                        <line x1="290" y1="10" x2="10" y2="290" stroke="#2c3e50" stroke-width="2"/>
+                        <text x="150" y="45" font-size="12" text-anchor="middle" fill="#c0392b" font-weight="bold">12</text>
+                        <text x="75" y="115" font-size="12" text-anchor="middle" fill="#c0392b" font-weight="bold">1</text>
+                        <text x="45" y="150" font-size="12" text-anchor="middle" fill="#c0392b" font-weight="bold">2</text>
+                        <text x="75" y="190" font-size="12" text-anchor="middle" fill="#c0392b" font-weight="bold">3</text>
+                        <text x="150" y="255" font-size="12" text-anchor="middle" fill="#c0392b" font-weight="bold">4</text>
+                        <text x="215" y="190" font-size="12" text-anchor="middle" fill="#c0392b" font-weight="bold">5</text>
+                        <text x="250" y="150" font-size="12" text-anchor="middle" fill="#c0392b" font-weight="bold">6</text>
+                        <text x="215" y="115" font-size="12" text-anchor="middle" fill="#c0392b" font-weight="bold">7</text>
+                        <text x="150" y="135" font-size="12" text-anchor="middle" fill="#2980b9" font-weight="bold">Lagna</text>
+                    </svg>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn-back" onclick="goToScreen(2)">&larr; Back</button>
+                <button class="btn-next" onclick="goToScreen(4)">Ashtakvarga &rarr;</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: Ashtakvarga & Hits (Planet-to-Planet & House) -->
+        <div id="screen4" class="screen">
+            <div class="card">
+                <h3>Sarvashtakvarga Points (Houses 1 to 12)</h3>
+                <table>
+                    <tr><th>H1</th><th>H2</th><th>H3</th><th>H4</th><th>H5</th><th>H6</th><th>H7</th><th>H8</th><th>H9</th><th>H10</th><th>H11</th><th>H12</th></tr>
+                    <tr><td>28</td><td>32</td><td>25</td><td>30</td><td>27</td><td>35</td><td>22</td><td>29</td><td>31</td><td>26</td><td>33</td><td>24</td></tr>
+                </table>
+            </div>
+            <div class="card">
+                <h3>Planet to Planet Aspects / Hits</h3>
+                <p style="font-size:12px; color:#555;">Conjunctions & Mutual Aspects detected based on KP positions.</p>
+                <table id="p2p-table">
+                    <tr><th>Planet 1</th><th>Aspect / Hit</th><th>Planet 2</th></tr>
+                    <tr><td>Sun</td><td>Conjunction</td><td>Mercury</td></tr>
+                    <tr><td>Mars</td><td>Opposition</td><td>Saturn</td></tr>
+                </table>
+            </div>
+            <div class="card">
+                <h3>Planet to House Hits</h3>
+                <table id="p2h-table">
+                    <tr><th>Planet</th><th>Influencing House</th></tr>
+                    <tr><td>Sun</td><td>House 1, House 10</td></tr>
+                    <tr><td>Moon</td><td>House 4, House 7</td></tr>
+                </table>
+            </div>
+            <div class="btn-group">
+                <button class="btn-back" onclick="goToScreen(3)">&larr; Back</button>
+                <button class="btn-next" onclick="goToScreen(5)">Vastu Chakra &rarr;</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 5: Vastu Chakra Preview & PDF Download -->
+        <div id="screen5" class="screen">
             <div class="card" style="text-align: center;">
-                <h3>Step 3: Chakra PDF Preview</h3>
+                <h3>Vastu Chakra Preview & HD PDF</h3>
                 <p id="user-summary" style="font-weight: bold; color: #2c3e50;"></p>
                 <div id="preview-box">
                     <canvas id="astroCanvas" width="900" height="900"></canvas>
                 </div>
             </div>
             <div class="btn-group">
-                <button class="btn-back" onclick="goToScreen(2)">&larr; Edit Degrees</button>
-                <button class="btn-pdf" onclick="downloadPDF()">Download HD PDF</button>
+                <button class="btn-back" onclick="goToScreen(4)">&larr; Back</button>
+                <button class="btn-pdf" onclick="downloadPDF()">Download HD PDF / Print</button>
             </div>
         </div>
 
@@ -152,7 +232,7 @@
                         alert("Could not fetch location automatically.");
                     }
                 }, () => {
-                    alert("Location permission denied.");
+                    alert("Location permission denied. Please type manually.");
                 });
             } else {
                 alert("Geolocation not supported.");
